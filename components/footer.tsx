@@ -43,12 +43,11 @@ export function Footer() {
           </span>
         </nav>
       </div>
-      <p
+      {/* Decorative outline wordmark, drawn as generated content so it is never read as text. */}
+      <div
         aria-hidden="true"
-        className="pointer-events-none -mb-[0.22em] text-center font-semibold tracking-[-0.06em] whitespace-nowrap text-paper-2 select-none [font-size:clamp(4rem,17vw,15rem)] [line-height:1] [-webkit-text-stroke:1px_var(--color-rule)]"
-      >
-        honey-stack
-      </p>
+        className="pointer-events-none -mb-[0.22em] text-center font-semibold tracking-[-0.06em] whitespace-nowrap text-paper-2 select-none [font-size:clamp(4rem,17vw,15rem)] [line-height:1] [-webkit-text-stroke:1px_var(--color-rule)] before:content-['honey-stack']"
+      />
     </footer>
   );
 }
