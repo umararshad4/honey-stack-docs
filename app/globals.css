@@ -1,26 +1,171 @@
+/* Hallmark · genre: atmospheric · macrostructure: Map / Diagram · theme: custom "honey after dark" · enrichment: Tier A canvas honeycomb + cursor spotlight (HP3) · nav: N5 · footer: Ft5
+ * paper oklch(15% 0.012 70) · accent oklch(82% 0.15 78) honey · Geist + Geist Mono
+ * axes: dark / geometric-sans / warm
+ */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Paper: warm near-black, lighter as it elevates. */
+  --color-paper: oklch(15% 0.012 70);
+  --color-paper-2: oklch(18.5% 0.014 70);
+  --color-paper-3: oklch(22% 0.016 70);
+  --color-rule: oklch(28% 0.014 70);
+  --color-rule-strong: oklch(36% 0.016 70);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Ink ramp. faint is decorative only; muted and up pass 4.5:1 on paper-3. */
+  --color-faint: oklch(50% 0.012 70);
+  --color-muted: oklch(72% 0.012 75);
+  --color-body: oklch(86% 0.008 78);
+  --color-ink: oklch(96% 0.008 85);
+
+  /* The one accent. */
+  --color-honey: oklch(82% 0.15 78);
+  --color-honey-deep: oklch(70% 0.16 62);
+  --color-on-honey: oklch(20% 0.04 60);
+  --color-ok: oklch(80% 0.13 150);
+
+  --shadow-float: 0 8px 32px -12px oklch(5% 0.01 70 / 0.8);
+  --shadow-glow: 0 0 0 1px oklch(82% 0.15 78 / 0.25), 0 12px 40px -16px oklch(70% 0.16 62 / 0.45);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --animate-blink: blink 1.1s steps(1) infinite;
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
   }
 }
 
+:root {
+  color-scheme: dark;
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+
+  /* Shiki css-variables theme mapped onto the palette. */
+  --shiki-foreground: var(--color-body);
+  --shiki-background: transparent;
+  --shiki-token-comment: var(--color-faint);
+  --shiki-token-keyword: var(--color-honey);
+  --shiki-token-function: var(--color-ink);
+  --shiki-token-string: oklch(80% 0.09 150);
+  --shiki-token-string-expression: oklch(80% 0.09 150);
+  --shiki-token-constant: var(--color-honey);
+  --shiki-token-parameter: var(--color-muted);
+  --shiki-token-punctuation: var(--color-muted);
+  --shiki-token-link: var(--color-honey);
+}
+
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: clip;
+}
+
+html {
+  background: var(--color-paper);
+  scrollbar-color: var(--color-rule-strong) transparent;
+}
+
+body {
+  color: var(--color-body);
+  font-family: var(--font-sans);
+  font-weight: 380;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in oklch, var(--color-honey) 35%, transparent);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-honey);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Two fixed warm blooms: the atmosphere. Static, never animated. */
+.bloom {
+  background:
+    radial-gradient(48rem 32rem at 12% -6%, color-mix(in oklch, var(--color-honey-deep) 16%, transparent), transparent 70%),
+    radial-gradient(40rem 28rem at 96% 8%, color-mix(in oklch, var(--color-honey) 8%, transparent), transparent 70%);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* Docs prose rhythm. Kept in CSS so page files stay pure content. */
+.prose-docs > * + * {
+  margin-top: 1.1rem;
+}
+.prose-docs > h2 {
+  margin-top: 3.25rem;
+}
+.prose-docs > h3 {
+  margin-top: 2.25rem;
+}
+.prose-docs > h2 + *,
+.prose-docs > h3 + * {
+  margin-top: 0.75rem;
+}
+.prose-docs p,
+.prose-docs li {
+  line-height: 1.75;
+}
+.prose-docs a:not([data-plain]) {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklch, var(--color-honey) 55%, transparent);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur-short) var(--ease-out);
+}
+.prose-docs a:not([data-plain]):hover {
+  text-decoration-color: var(--color-honey);
+}
+.prose-docs strong {
+  color: var(--color-ink);
+  font-weight: 550;
+}
+.prose-docs :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--color-ink);
+  background: var(--color-paper-3);
+  border: 1px solid var(--color-rule);
+  border-radius: 6px;
+  padding: 0.1em 0.35em;
+  overflow-wrap: anywhere;
+}
+
+.shiki,
+.shiki code {
+  background: transparent !important;
+  font-family: var(--font-mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 150ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+    scroll-behavior: auto !important;
+  }
 }
