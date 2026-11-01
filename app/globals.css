@@ -15,8 +15,8 @@
   --color-rule: oklch(28% 0.014 70);
   --color-rule-strong: oklch(36% 0.016 70);
 
-  /* Ink ramp. faint is decorative only; muted and up pass 4.5:1 on paper-3. */
-  --color-faint: oklch(50% 0.012 70);
+  /* Ink ramp. Every step passes WCAG AA (4.5:1) on paper, paper-2 and paper-3; faint is the quietest. */
+  --color-faint: oklch(62% 0.012 72);
   --color-muted: oklch(72% 0.012 75);
   --color-body: oklch(86% 0.008 78);
   --color-ink: oklch(96% 0.008 85);

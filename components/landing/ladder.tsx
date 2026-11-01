@@ -154,10 +154,16 @@ export function Ladder() {
             return (
               <li key={rung.title} className="relative" style={{ paddingLeft: `calc(${i} * min(4.5%, 1.6rem))` }}>
                 <motion.div
-                  animate={{ opacity: i > level ? 0.36 : 1, x: current && !reduce ? 4 : 0 }}
+                  animate={{ x: current && !reduce ? 4 : 0 }}
                   transition={{ duration: 0.35, ease: easeOut }}
                   className={`relative flex items-center gap-4 overflow-hidden rounded-xl border px-4 py-3 transition-colors duration-(--dur-long) ${
-                    final ? "border-honey/60 bg-paper-2 shadow-glow" : current ? "border-rule-strong bg-paper-2" : "border-rule bg-paper-2/40"
+                    final
+                      ? "border-honey/60 bg-paper-2 shadow-glow"
+                      : current
+                        ? "border-rule-strong bg-paper-2"
+                        : i > level
+                          ? "border-dashed border-rule bg-transparent"
+                          : "border-rule bg-paper-2/40"
                   }`}
                 >
                   {current && (
@@ -185,8 +191,10 @@ export function Ladder() {
                     </AnimatePresence>
                   </span>
                   <span className="relative min-w-0">
-                    <span className={`block text-[15px] ${current ? "text-ink" : "text-body"}`}>{rung.title}</span>
-                    <span className="block text-[13px] text-muted">{rung.body}</span>
+                    <span className={`block text-[15px] transition-colors duration-(--dur-long) ${current ? "text-ink" : i > level ? "text-muted" : "text-body"}`}>
+                      {rung.title}
+                    </span>
+                    <span className={`block text-[13px] transition-colors duration-(--dur-long) ${i > level ? "text-faint" : "text-muted"}`}>{rung.body}</span>
                   </span>
                   <AnimatePresence>
                     {final && (

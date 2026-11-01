@@ -77,7 +77,7 @@ export function Flow() {
               <motion.li
                 key={step.name}
                 className="flex gap-4 md:flex-col md:items-center md:text-center"
-                animate={{ y: on || reduce ? 0 : 6, opacity: on || reduce ? 1 : 0.55 }}
+                animate={{ y: on || reduce ? 0 : 6 }}
                 transition={{ duration: 0.5, ease: easeOut }}
               >
                 <motion.span

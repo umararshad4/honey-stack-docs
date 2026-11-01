@@ -40,9 +40,6 @@ export function Pipeline() {
           key={stage.name}
           data-spotlight=""
           className="relative bg-paper-2 p-5"
-          initial={{ opacity: reduce ? 1 : 0.35 }}
-          animate={inView ? { opacity: 1 } : undefined}
-          transition={{ duration: reduce ? 0 : 0.4, delay: reduce ? 0 : i * 0.16 }}
         >
           <motion.span
             aria-hidden="true"
