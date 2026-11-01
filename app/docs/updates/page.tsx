@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import { Code } from "@/components/code";
 import { Callout, DocHeader, H2 } from "@/components/docs/prose";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Update & uninstall" };
+const PATH = "/docs/updates";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Update & uninstall"
         lede="honey-stack updates itself from release tags, never touches your local work, and uninstalls cleanly."
       />

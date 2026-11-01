@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useInView } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { useEffect, useRef, useState } from "react";
 import { easeOut, SectionHead } from "../reveal";
 
@@ -10,24 +11,28 @@ const STEPS = [
     pos: "top-[5%] left-1/2 -translate-x-1/2 -translate-y-1/2",
     body: "Hooks log bounded, redacted requests, corrections, “still broken” and which skills fired. Ambiguous feedback stays uncertain instead of blaming every recent skill.",
     fact: "≤300-char redacted snippets",
+    artifact: { label: "signal", text: "“no — tests still share the cart”" },
   },
   {
     name: "Reflect",
     pos: "top-1/2 right-0 translate-x-1/2 -translate-y-1/2",
     body: "After a session with signal, a small model proposes evidence-backed WHEN → THEN rules. Haiku via Claude, or Codex.",
     fact: "about $0.002 per reflection",
+    artifact: { label: "proposed rule", text: "WHEN tests share state → THEN isolate fixtures" },
   },
   {
     name: "Curate",
     pos: "bottom-[5%] left-1/2 -translate-x-1/2 translate-y-1/2",
     body: "A rule goes live once two sessions back it. It goes stale after 30 days and is archived after 90. Deterministic, no model call.",
     fact: "2 sessions · 30 days · 90 days",
+    artifact: { label: "promoted", text: "backed by 2 sessions → live" },
   },
   {
     name: "Apply",
     pos: "top-1/2 left-0 -translate-x-1/2 -translate-y-1/2",
     body: "Review mode queues changes for /rsi review. Autonomous mode applies supported changes after validation — instruction edits, skill patches, guards.",
     fact: "every tier has its own gate",
+    artifact: { label: "applied", text: "loaded into every session's brief · tier 0" },
   },
 ];
 
@@ -39,6 +44,7 @@ const TIERS = [
 ];
 
 const C = 2 * Math.PI * 120;
+const DWELL_MS = 4200;
 
 export function RsiLoop() {
   const ref = useRef<HTMLDivElement>(null);
@@ -47,10 +53,11 @@ export function RsiLoop() {
   const [step, setStep] = useState(0); // ever-increasing so the orbit never spins backwards
   const [paused, setPaused] = useState(false);
   const active = step % STEPS.length;
+  const playing = inView && !paused && !reduce;
 
   useEffect(() => {
     if (!inView || paused || reduce) return;
-    const t = setInterval(() => setStep((s) => s + 1), 3800);
+    const t = setInterval(() => setStep((s) => s + 1), DWELL_MS);
     return () => clearInterval(t);
   }, [inView, paused, reduce]);
 
@@ -62,11 +69,8 @@ export function RsiLoop() {
     <section className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
       <SectionHead
         id="rsi"
-        title={
-          <>
-            It gets better <span className="text-honey">every session.</span>
-          </>
-        }
+        title="It gets better every session."
+        accent="every session."
         lede="RSI — recursive self-improvement — watches how sessions actually go, turns your corrections into rules, and rules into evaluated skill patches. Nothing applies without passing its gate."
       />
 
@@ -81,7 +85,12 @@ export function RsiLoop() {
         <div className="relative mx-auto aspect-square w-[76%] max-w-[22rem] sm:w-full">
           <svg viewBox="0 0 320 320" className="absolute inset-0 size-full" aria-hidden="true">
             <circle cx="160" cy="160" r="120" fill="none" stroke="var(--color-rule)" strokeWidth="1" />
-            <circle cx="160" cy="160" r="84" fill="none" stroke="var(--color-rule)" strokeWidth="1" strokeDasharray="2 6" />
+            <g
+              className="origin-center animate-orbit [transform-box:fill-box]"
+              style={{ animationPlayState: inView ? "running" : "paused" }}
+            >
+              <circle cx="160" cy="160" r="84" fill="none" stroke="var(--color-rule-strong)" strokeWidth="1" strokeDasharray="2 6" />
+            </g>
             <motion.g
               animate={{ rotate: step * 90 }}
               transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 60, damping: 16, mass: 1 }}
@@ -130,6 +139,16 @@ export function RsiLoop() {
                 i === active ? "border-honey/70 bg-paper-2 text-honey" : "border-rule bg-paper/80 text-muted hover:text-ink"
               }`}
             >
+              {i === active && !reduce && (
+                <motion.span
+                  key={step}
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full border border-honey/60"
+                  initial={{ opacity: 0.8, scale: 1 }}
+                  animate={{ opacity: 0, scale: 1.6 }}
+                  transition={{ duration: 1.1, ease: easeOut }}
+                />
+              )}
               {s.name.toLowerCase()}
             </button>
           ))}
@@ -152,13 +171,34 @@ export function RsiLoop() {
               </p>
             </motion.div>
           </AnimatePresence>
+
+          <div data-spotlight="" className="mt-6 overflow-hidden rounded-xl border border-rule bg-paper-2/70 px-4 py-3">
+            <p className="font-mono text-[11px] tracking-wide text-faint uppercase">One correction, travelling the loop</p>
+            <div className="relative mt-1.5 h-6">
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.p
+                  key={active}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14, filter: "blur(6px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={reduce ? { opacity: 0 } : { opacity: 0, y: -14, filter: "blur(6px)" }}
+                  transition={{ duration: 0.45, ease: easeOut }}
+                  className="absolute inset-x-0 truncate font-mono text-[13px] text-ink"
+                >
+                  <span className="text-honey">{STEPS[active].artifact.label}</span> <span className="text-faint">·</span>{" "}
+                  {STEPS[active].artifact.text}
+                </motion.p>
+              </AnimatePresence>
+            </div>
+          </div>
           <div className="mt-8 flex gap-1.5" aria-hidden="true">
             {STEPS.map((s, i) => (
               <span key={s.name} className="h-1 flex-1 overflow-hidden rounded-full bg-paper-3">
                 <motion.span
+                  key={i === active ? `run-${step}-${playing}` : `seg-${i}`}
                   className="block h-full origin-left bg-honey"
+                  initial={{ scaleX: i < active ? 1 : 0 }}
                   animate={{ scaleX: i <= active ? 1 : 0 }}
-                  transition={{ duration: 0.5, ease: easeOut }}
+                  transition={i === active && playing ? { duration: DWELL_MS / 1000, ease: "linear" } : { duration: 0.5, ease: easeOut }}
                 />
               </span>
             ))}
@@ -177,7 +217,8 @@ export function RsiLoop() {
               viewport={{ once: true, margin: "-8% 0px" }}
               transition={{ duration: 0.55, delay: i * 0.08, ease: easeOut }}
               style={{ marginLeft: `calc(${i} * min(3%, 1.25rem))` }}
-              className="grid grid-cols-1 items-center gap-x-5 gap-y-1 rounded-xl border border-rule bg-paper-2/50 px-4 py-3 sm:grid-cols-[4.5rem_minmax(0,1fr)_auto]"
+              data-spotlight=""
+              className="grid grid-cols-1 items-center gap-x-5 gap-y-1 rounded-xl border border-rule bg-paper-2/50 px-4 py-3 transition-[border-color,translate] duration-(--dur-long) ease-out hover:-translate-y-0.5 hover:border-rule-strong sm:grid-cols-[4.5rem_minmax(0,1fr)_auto]"
             >
               <span className="font-mono text-sm text-honey tabular-nums">Tier {t.tier}</span>
               <span className="text-[15px] text-body">{t.change}</span>

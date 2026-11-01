@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Code } from "@/components/code";
 import { Callout, DocHeader, H2, Steps, Table } from "@/components/docs/prose";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "RSI: how it learns" };
+const PATH = "/docs/rsi";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="RSI: how it learns"
         lede="Recursive self-improvement watches how sessions actually go, turns repeated corrections into rules, and turns evidence into evaluated skill patches. Every change passes a gate first."
       />

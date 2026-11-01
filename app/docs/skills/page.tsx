@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
 import { Callout, DocHeader, H2, Table } from "@/components/docs/prose";
 import { agents, autoSkills, manualSkills, skillCount, type Skill } from "@/lib/skills";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Skills & agents" };
+const PATH = "/docs/skills";
+
+export const metadata = pageMetadata(PATH);
 
 const rows = (skills: Skill[]) => skills.map((s) => [<code key={s.name}>{s.name}</code>, s.summary]);
 
@@ -10,6 +12,7 @@ export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Skills & agents"
         lede={`${skillCount} skills and four subagents. Skills stay out of context until a task calls for them, so the always-on footprint stays small.`}
       />

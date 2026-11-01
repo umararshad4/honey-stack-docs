@@ -3,8 +3,7 @@ import type { Release } from "@/lib/github";
 import { site } from "@/lib/site";
 import { SectionHead } from "../reveal";
 import { Pipeline } from "./pipeline";
-
-const dateFmt = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+import { ReleaseList } from "./release-list";
 
 export function SelfShip({ releases }: { releases: Release[] }) {
   return (
@@ -12,6 +11,7 @@ export function SelfShip({ releases }: { releases: Release[] }) {
       <SectionHead
         id="ships-itself"
         title="It ships its own upgrades."
+        accent="its own upgrades."
         lede={
           <>
             Opt in with <code className="font-mono text-[15px] text-ink">honey rsi publish automatic</code> and a validated
@@ -40,22 +40,7 @@ export function SelfShip({ releases }: { releases: Release[] }) {
         </div>
 
         {releases.length > 0 ? (
-          <ul className="divide-y divide-rule border-y border-rule">
-            {releases.map((r) => (
-              <li key={r.tag}>
-                <a
-                  href={r.url}
-                  className="group grid grid-cols-1 gap-x-5 gap-y-1 py-3.5 transition-colors sm:grid-cols-[5.5rem_6.5rem_minmax(0,1fr)]"
-                >
-                  <span className="font-mono text-sm text-honey tabular-nums">{r.tag}</span>
-                  <span className="text-sm text-muted tabular-nums">{r.date ? dateFmt.format(new Date(r.date)) : "—"}</span>
-                  <span className="truncate text-sm text-body transition-colors group-hover:text-ink" title={r.summary}>
-                    {r.summary || "See release notes"}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <ReleaseList releases={releases} />
         ) : (
           <p className="rounded-xl border border-dashed border-rule p-5 text-sm text-muted">
             Release history couldn’t be loaded right now.{" "}

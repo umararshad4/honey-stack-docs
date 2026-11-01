@@ -17,7 +17,8 @@ export function Pager() {
     <div className="mt-20 border-t border-rule pt-8">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {prev ? (
-          <Link href={prev.href} className="group rounded-xl border border-rule p-4 transition-colors hover:border-rule-strong hover:bg-paper-2">
+          <Link href={prev.href} data-spotlight=""
+                className="group rounded-xl border border-rule p-4 transition-colors hover:border-rule-strong hover:bg-paper-2">
             <span className="flex items-center gap-1.5 text-xs text-muted">
               <ArrowLeft size={13} className="transition-transform duration-(--dur-short) group-hover:-translate-x-0.5" /> Previous
             </span>
@@ -27,7 +28,8 @@ export function Pager() {
           <span className="hidden sm:block" />
         )}
         {next && (
-          <Link href={next.href} className="group rounded-xl border border-rule p-4 text-right transition-colors hover:border-rule-strong hover:bg-paper-2">
+          <Link href={next.href} data-spotlight=""
+                className="group rounded-xl border border-rule p-4 text-right transition-colors hover:border-rule-strong hover:bg-paper-2">
             <span className="flex items-center justify-end gap-1.5 text-xs text-muted">
               Next <ArrowRight size={13} className="transition-transform duration-(--dur-short) group-hover:translate-x-0.5" />
             </span>

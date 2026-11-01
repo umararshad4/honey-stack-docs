@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
 import { Callout, DocHeader, H2, Table } from "@/components/docs/prose";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Hooks & safety" };
+const PATH = "/docs/hooks";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Hooks & safety"
         lede="Every lifecycle event in Claude Code and Codex calls one frozen command. All logic lives behind it in a small, stdlib-only Python package."
       />

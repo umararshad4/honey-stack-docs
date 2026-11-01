@@ -2,10 +2,13 @@
 
 import { useEffect, useRef } from "react";
 
-type Cell = { x: number; y: number; glow: number };
+type Cell = { x: number; y: number; glow: number; boost: number };
+type Ripple = { x: number; y: number; t0: number; strength: number };
 
 const R = 21; // hex radius in CSS px
 const SPOT = 150; // cursor spotlight radius
+const RIPPLE_SPEED = 0.62; // px per ms
+const RIPPLE_WIDTH = 80;
 
 function hexPath(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
   ctx.moveTo(x, y - r);
@@ -17,8 +20,9 @@ function hexPath(ctx: CanvasRenderingContext2D, x: number, y: number, r: number)
 }
 
 /**
- * Honeycomb field. The grid is drawn once per resize; a frame loop runs only while
- * cells are glowing (pointer nearby or the one-shot entrance ripple), then stops.
+ * Living honeycomb. The grid is drawn once per resize. A frame loop runs only while
+ * something glows — the cursor spotlight, click ripples, or the occasional ambient
+ * pulse — and it is paused entirely when the hero is off screen or the tab is hidden.
  */
 export function Honeycomb() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -36,13 +40,14 @@ export function Honeycomb() {
     const grid = document.createElement("canvas");
     const gctx = grid.getContext("2d")!;
     let cells: Cell[] = [];
+    let ripples: Ripple[] = reduce ? [] : [{ x: 0, y: 0, t0: performance.now(), strength: 0.6 }];
     let w = 0;
     let h = 0;
     let dpr = 1;
     let pointer: { x: number; y: number } | null = null;
     let raf = 0;
-    const start = performance.now();
-    let rippleDone = reduce;
+    let visible = true;
+    let pulseTimer: ReturnType<typeof setTimeout> | undefined;
 
     function layout() {
       const rect = canvas!.getBoundingClientRect();
@@ -55,14 +60,11 @@ export function Honeycomb() {
       }
       const dx = Math.sqrt(3) * R;
       const dy = 1.5 * R;
-      const prev = new Map(cells.map((c) => [`${c.x},${c.y}`, c.glow]));
       cells = [];
       for (let row = -1; row * dy < h + R * 2; row++) {
         const y = row * dy;
         const offset = row % 2 ? dx / 2 : 0;
-        for (let x = offset - dx; x < w + dx; x += dx) {
-          cells.push({ x, y, glow: prev.get(`${x},${y}`) ?? 0 });
-        }
+        for (let x = offset - dx; x < w + dx; x += dx) cells.push({ x, y, glow: 0, boost: 0 });
       }
       gctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       gctx.clearRect(0, 0, w, h);
@@ -80,25 +82,32 @@ export function Honeycomb() {
       ctx!.drawImage(grid, 0, 0);
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Entrance: a single ripple travelling out from the top-left over ~1.8s.
-      const front = rippleDone ? -1 : ((now - start) / 1800) * Math.hypot(w, h);
-      if (!rippleDone && front > Math.hypot(w, h) + 200) rippleDone = true;
+      const reach = Math.hypot(w, h) + RIPPLE_WIDTH * 2;
+      ripples = ripples.filter((r) => (now - r.t0) * RIPPLE_SPEED < reach);
+      let settling = ripples.length > 0;
 
-      let settling = !rippleDone;
       ctx!.strokeStyle = honey;
       ctx!.fillStyle = honey;
       for (const c of cells) {
-        let target = 0;
+        let target = c.boost;
+        if (c.boost > 0.002) {
+          c.boost *= 0.955;
+          settling = true;
+        } else c.boost = 0;
         if (pointer) {
           const d = Math.hypot(c.x - pointer.x, c.y - pointer.y);
-          if (d < SPOT) target = (1 - d / SPOT) ** 2;
+          if (d < SPOT) target = Math.max(target, (1 - d / SPOT) ** 2);
         }
-        if (front > 0) {
-          const d = Math.abs(Math.hypot(c.x, c.y) - front);
-          if (d < 90) target = Math.max(target, (1 - d / 90) * 0.55);
+        for (const r of ripples) {
+          const front = (now - r.t0) * RIPPLE_SPEED;
+          const d = Math.abs(Math.hypot(c.x - r.x, c.y - r.y) - front);
+          if (d < RIPPLE_WIDTH) {
+            const fade = Math.max(0, 1 - front / reach);
+            target = Math.max(target, (1 - d / RIPPLE_WIDTH) * r.strength * (0.4 + 0.6 * fade));
+          }
         }
         const delta = target - c.glow;
-        c.glow += delta * (delta > 0 ? 0.25 : 0.06);
+        c.glow += delta * (delta > 0 ? 0.28 : 0.07);
         if (Math.abs(delta) > 0.003) settling = true;
         if (c.glow < 0.004) {
           c.glow = 0;
@@ -106,18 +115,34 @@ export function Honeycomb() {
         }
         ctx!.beginPath();
         hexPath(ctx!, c.x, c.y, R - 1.5);
-        ctx!.globalAlpha = c.glow * 0.16;
+        ctx!.globalAlpha = c.glow * 0.17;
         ctx!.fill();
-        ctx!.globalAlpha = c.glow * 0.85;
+        ctx!.globalAlpha = c.glow * 0.9;
         ctx!.stroke();
       }
       ctx!.globalAlpha = 1;
-      if (settling) raf = requestAnimationFrame(frame);
+      if (settling && visible) raf = requestAnimationFrame(frame);
     }
 
     const wake = () => {
-      if (!raf) raf = requestAnimationFrame(frame);
+      if (!raf && visible) raf = requestAnimationFrame(frame);
     };
+
+    // Ambient life: every second or so a few cells breathe in and out.
+    function schedulePulse() {
+      pulseTimer = setTimeout(() => {
+        if (visible && cells.length) {
+          const count = 1 + Math.floor(Math.random() * 2);
+          for (let i = 0; i < count; i++) {
+            const c = cells[Math.floor(Math.random() * cells.length)];
+            // Favour the upper-left, where the mask keeps the grid visible.
+            if (c.x < w * 0.75 && c.y < h * 0.8) c.boost = 0.35 + Math.random() * 0.35;
+          }
+          wake();
+        }
+        schedulePulse();
+      }, 700 + Math.random() * 900);
+    }
 
     let last: { x: number; y: number } | null = null;
     function track() {
@@ -132,11 +157,32 @@ export function Honeycomb() {
       last = { x: e.clientX, y: e.clientY };
       track();
     }
+    function onDown(e: PointerEvent) {
+      const el = e.target as Element | null;
+      if (el?.closest("a, button, input, textarea, select, code, figure, [data-no-ripple]")) return;
+      const rect = canvas!.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      if (x < 0 || y < 0 || x > w || y > h) return;
+      ripples.push({ x, y, t0: performance.now(), strength: 0.85 });
+      if (ripples.length > 4) ripples.shift();
+      wake();
+    }
     const onLeave = () => {
       last = null;
       pointer = null;
       wake();
     };
+    const onVisibility = () => {
+      visible = document.visibilityState === "visible" && inView;
+      if (visible) wake();
+    };
+
+    let inView = true;
+    const io = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      onVisibility();
+    });
 
     layout();
     wake();
@@ -145,17 +191,25 @@ export function Honeycomb() {
       wake();
     });
     ro.observe(canvas);
+    io.observe(canvas);
     if (!reduce) {
       window.addEventListener("pointermove", onMove, { passive: true });
+      window.addEventListener("pointerdown", onDown, { passive: true });
       window.addEventListener("scroll", track, { passive: true });
       document.documentElement.addEventListener("pointerleave", onLeave);
+      document.addEventListener("visibilitychange", onVisibility);
+      schedulePulse();
     }
     return () => {
       cancelAnimationFrame(raf);
+      clearTimeout(pulseTimer);
       ro.disconnect();
+      io.disconnect();
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("scroll", track);
       document.documentElement.removeEventListener("pointerleave", onLeave);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
 

@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Bullets, Callout, DocHeader, H2 } from "@/components/docs/prose";
 import { docsNav } from "@/lib/nav";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Introduction" };
+const PATH = "/docs";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Introduction"
         lede="honey-stack is one always-on toolkit for Claude Code and Codex. It keeps a small set of rules in every session, loads skills only when a task needs them, and learns from how your sessions actually go."
       />
@@ -69,6 +72,7 @@ export default function Page() {
                 key={l.href}
                 href={l.href}
                 data-plain=""
+                data-spotlight=""
                 className="group rounded-xl border border-rule p-4 transition-colors hover:border-rule-strong hover:bg-paper-2"
               >
                 <span className="block font-medium text-ink">{l.title}</span>

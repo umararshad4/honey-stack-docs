@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import { Code } from "@/components/code";
 import { Callout, DocHeader, H2, Table } from "@/components/docs/prose";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Modes" };
+const PATH = "/docs/modes";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Modes"
         lede="Pick how much the agent explains. Modes change response detail only — task sizing, verification and safety apply in every mode."
       />

@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Code } from "@/components/code";
 import { Bullets, DocHeader, H2 } from "@/components/docs/prose";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Configuration" };
+const PATH = "/docs/configuration";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Configuration"
         lede="Everything lives in ~/.honey/config.json, and every key is optional. The defaults are the recommended setup."
       />

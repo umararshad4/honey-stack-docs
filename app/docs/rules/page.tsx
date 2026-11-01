@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
 import { Callout, DocHeader, H2, Steps, Table } from "@/components/docs/prose";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Always-on rules" };
+const PATH = "/docs/rules";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Always-on rules"
         lede="About 2 KB of rules ride along in every session. They decide how big a task is, how much to build, when work counts as done and when to ask you."
       />

@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
 import { Code } from "@/components/code";
 import { DocHeader, H2, Table } from "@/components/docs/prose";
 import { repoPath } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Development" };
+const PATH = "/docs/development";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Development"
         lede="Stdlib tests, plugin validation and evals locally — then every green merge to main versions and publishes itself."
       />

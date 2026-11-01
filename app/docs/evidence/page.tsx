@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import { Code } from "@/components/code";
 import { Callout, DocHeader, H2 } from "@/components/docs/prose";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Task evidence" };
+const PATH = "/docs/evidence";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Task evidence"
         lede="Hooks keep a bounded record of each task — its mode, workspace, targets and required checks — so “done” can be tied to fresh, real results."
       />

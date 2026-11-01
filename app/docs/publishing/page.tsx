@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import { Code } from "@/components/code";
 import { Callout, DocHeader, H2, Steps } from "@/components/docs/prose";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Publishing" };
+const PATH = "/docs/publishing";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Publishing"
         lede="Opt in, and honey-stack turns what it learns into GitHub issues and evaluated skill PRs — and, if you allow it, merges and releases them for every install."
       />

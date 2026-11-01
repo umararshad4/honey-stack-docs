@@ -54,3 +54,21 @@ export const agents: Skill[] = [
 ];
 
 export const skillCount = autoSkills.length + manualSkills.length;
+
+/** The whole job, end to end: every skill belongs to exactly one area. */
+export const areas = [
+  { name: "Think", blurb: "Settle the decision before the code.", skills: ["grill", "plan", "architecture", "domain", "prototype", "research", "principles"] },
+  { name: "Build", blurb: "Make the smallest complete change.", skills: ["execute", "frontend", "api-design", "database", "tooling", "upgrade", "opensrc", "stageshow"] },
+  { name: "Prove", blurb: "Evidence before anyone says done.", skills: ["debug", "tdd", "test-design", "verify", "qa", "project-verify", "statechart", "perf"] },
+  { name: "Ship & run", blurb: "Review, release and keep it healthy.", skills: ["review", "ship", "deploy", "observability", "incident", "security", "triage"] },
+  { name: "Write & learn", blurb: "Clear words, and a toolkit that improves.", skills: ["docs", "unslop", "teach", "handoff", "write-skill", "honey", "rsi", "reverse-engineer"] },
+] as const;
+
+const byName = new Map([...autoSkills, ...manualSkills].map((s) => [s.name, s]));
+const autoNames = new Set(autoSkills.map((s) => s.name));
+
+export function skillInfo(name: string) {
+  const skill = byName.get(name);
+  if (!skill) throw new Error(`Unknown skill ${name}`);
+  return { ...skill, auto: autoNames.has(name) };
+}

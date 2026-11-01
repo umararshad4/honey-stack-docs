@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
 import { Code } from "@/components/code";
 import { Callout, DocHeader, H2, Steps } from "@/components/docs/prose";
 import { installCommand } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Installation" };
+const PATH = "/docs/install";
+
+export const metadata = pageMetadata(PATH);
 
 export default function Page() {
   return (
     <>
       <DocHeader
+        path={PATH}
         title="Installation"
         lede="One command installs honey-stack into Claude Code and Codex, puts honey on your PATH and turns off competing always-on plugins. Every change is reversible."
       />

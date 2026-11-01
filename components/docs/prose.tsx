@@ -1,10 +1,60 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
+import { CONTENT_UPDATED, pageSeo } from "@/lib/seo";
+import { docGraph } from "@/lib/structured-data";
+import { JsonLd } from "../json-ld";
+import { Words } from "../reveal";
 
-export function DocHeader({ title, lede }: { title: string; lede: ReactNode }) {
+const updated = new Intl.DateTimeFormat("en", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }).format(
+  new Date(`${CONTENT_UPDATED}T00:00:00Z`),
+);
+
+/** Page heading plus the breadcrumb trail and structured data that match it. */
+export function DocHeader({ path, title, lede }: { path: string; title: string; lede: ReactNode }) {
+  const { name } = pageSeo(path);
   return (
     <header className="mb-10 border-b border-rule pb-8">
-      <h1 className="text-4xl font-semibold tracking-[-0.035em] text-balance text-ink [overflow-wrap:anywhere] sm:text-5xl">{title}</h1>
+      <JsonLd data={docGraph(path)} />
+      <nav aria-label="Breadcrumb" className="mb-5 hidden font-mono text-xs text-muted lg:block">
+        <ol className="flex items-center gap-2">
+          <li>
+            <Link href="/" className="transition-colors hover:text-ink">
+              Home
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-faint">
+            /
+          </li>
+          <li>
+            {path === "/docs" ? (
+              <span aria-current="page" className="text-ink">
+                Docs
+              </span>
+            ) : (
+              <Link href="/docs" className="transition-colors hover:text-ink">
+                Docs
+              </Link>
+            )}
+          </li>
+          {path !== "/docs" && (
+            <>
+              <li aria-hidden="true" className="text-faint">
+                /
+              </li>
+              <li aria-current="page" className="text-ink">
+                {name}
+              </li>
+            </>
+          )}
+        </ol>
+      </nav>
+      <h1 className="text-4xl font-semibold tracking-[-0.035em] text-balance text-ink [overflow-wrap:anywhere] sm:text-5xl">
+        <Words text={title} stagger={0.04} />
+      </h1>
       <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-muted">{lede}</p>
+      <p className="mt-5 font-mono text-xs text-muted">
+        Updated <time dateTime={CONTENT_UPDATED}>{updated}</time>
+      </p>
     </header>
   );
 }

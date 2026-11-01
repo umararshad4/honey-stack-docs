@@ -30,7 +30,7 @@ export function CopyButton({ text, className = "" }: { text: string; className?:
       onClick={copy}
       aria-label={label}
       title={label}
-      className={`relative grid size-8 shrink-0 place-items-center rounded-lg text-muted transition-colors duration-(--dur-short) ease-out hover:bg-paper-3 hover:text-ink active:translate-y-px ${className}`}
+      className={`${/\babsolute\b/.test(className) ? "" : "relative "}grid size-8 shrink-0 place-items-center rounded-lg text-muted transition-colors duration-(--dur-short) ease-out hover:bg-paper-3 hover:text-ink active:translate-y-px ${className}`}
     >
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span

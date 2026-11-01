@@ -1,27 +1,54 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
 import { LogoMark } from "./logo";
+import { Words } from "./reveal";
+
+const links = [
+  { href: "/docs", label: "Docs" },
+  { href: "/docs/install", label: "Install" },
+  { href: "/docs/skills", label: "Skills" },
+  { href: site.repo, label: "GitHub" },
+  { href: `${site.repo}/blob/main/CHANGELOG.md`, label: "Changelog" },
+  { href: "/releases.xml", label: "Releases feed" },
+];
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-rule">
-      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
-        <p className="max-w-2xl text-2xl leading-snug font-medium tracking-tight text-balance text-ink sm:text-3xl">
-          Smallest complete change. Proof before done.{" "}
-          <span className="text-muted">Better every session.</span>
+    <footer className="relative overflow-hidden border-t border-rule">
+      <div className="mx-auto max-w-6xl px-5 pt-20 pb-12 sm:px-8">
+        <p className="max-w-3xl text-3xl leading-[1.12] font-semibold tracking-[-0.035em] text-balance text-ink sm:text-5xl">
+          <Words text="Smallest complete change. Proof before done. Better every session." accent="Better every session." stagger={0.035} />
         </p>
-        <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted">
-          <span className="flex items-center gap-2 text-ink">
+        <nav aria-label="Footer" className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted">
+          <Link href="/" className="flex items-center gap-2 text-ink" aria-label="honey-stack home">
             <LogoMark size={18} className="text-honey" />
             <span className="font-mono text-[13px]">honey-stack</span>
+          </Link>
+          {links.map((l) =>
+            l.href.startsWith("/") && !l.href.endsWith(".xml") ? (
+              <Link key={l.href} href={l.href} className="transition-colors hover:text-ink">
+                {l.label}
+              </Link>
+            ) : (
+              <a key={l.href} href={l.href} className="transition-colors hover:text-ink">
+                {l.label}
+              </a>
+            ),
+          )}
+          <span className="sm:ml-auto">
+            MIT © {site.author} ·{" "}
+            <a href={site.docsRepo} className="transition-colors hover:text-ink">
+              Edit these docs
+            </a>
           </span>
-          <Link href="/docs" className="transition-colors hover:text-ink">Docs</Link>
-          <Link href="/docs/install" className="transition-colors hover:text-ink">Install</Link>
-          <a href={site.repo} className="transition-colors hover:text-ink">GitHub</a>
-          <a href={`${site.repo}/blob/main/CHANGELOG.md`} className="transition-colors hover:text-ink">Changelog</a>
-          <span className="sm:ml-auto">MIT © {site.author}</span>
-        </div>
+        </nav>
       </div>
+      <p
+        aria-hidden="true"
+        className="pointer-events-none -mb-[0.22em] text-center font-semibold tracking-[-0.06em] whitespace-nowrap text-paper-2 select-none [font-size:clamp(4rem,17vw,15rem)] [line-height:1] [-webkit-text-stroke:1px_var(--color-rule)]"
+      >
+        honey-stack
+      </p>
     </footer>
   );
 }

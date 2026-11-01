@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { site } from "@/lib/site";
 import { Wordmark } from "./logo";
 
@@ -22,15 +23,30 @@ export function GitHubMark({ size = 16 }: { size?: number }) {
 
 export function Nav({ version }: { version: string }) {
   const pathname = usePathname();
+  const { scrollY } = useScroll();
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Tuck away while reading downward; return on any upward scroll or near the top.
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    setScrolled(y > 24);
+    if (y < 120) setHidden(false);
+    else if (y > prev + 6) setHidden(true);
+    else if (y < prev - 6) setHidden(false);
+  });
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-3">
       <motion.nav
         aria-label="Primary"
         initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="pointer-events-auto flex w-full max-w-3xl items-center gap-1 rounded-full border border-rule bg-paper-2/75 py-1.5 pr-1.5 pl-4 shadow-float backdrop-blur-xl"
+        animate={{ opacity: 1, y: hidden ? -84 : 0, scale: scrolled ? 0.985 : 1 }}
+        transition={{ type: "spring", stiffness: 320, damping: 34, opacity: { duration: 0.5 } }}
+        onFocusCapture={() => setHidden(false)}
+        className={`pointer-events-auto flex w-full max-w-3xl items-center gap-1 rounded-full border py-1.5 pr-1.5 pl-4 shadow-float backdrop-blur-xl transition-colors duration-(--dur-long) ${
+          scrolled ? "border-rule-strong bg-paper-2/90" : "border-rule bg-paper-2/70"
+        }`}
       >
         <Link href="/" aria-label="honey-stack home" className="mr-auto rounded-full py-1" data-plain="">
           <Wordmark />

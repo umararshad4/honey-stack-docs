@@ -1,13 +1,15 @@
 "use client";
 
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { useRef } from "react";
+import { Count } from "../count";
 import { easeOut, SectionHead } from "../reveal";
 
 const BARS = [
-  { label: "Stacked toolkits", note: "competing “YOU MUST” prompts", kb: 25, display: "~25 KB", tone: "muted" },
-  { label: "honey-stack rules", note: "one layer that agrees with itself", kb: 2, display: "~2 KB", tone: "honey" },
-  { label: "Learned brief", note: "your rules, budgeted", kb: 1.5, display: "≤1.5 KB", tone: "soft" },
+  { label: "Stacked toolkits", note: "competing “YOU MUST” prompts", kb: 25, prefix: "~", decimals: 0, tone: "muted" },
+  { label: "honey-stack rules", note: "one layer that agrees with itself", kb: 2, prefix: "~", decimals: 0, tone: "honey" },
+  { label: "Learned brief", note: "your rules, budgeted", kb: 1.5, prefix: "≤", decimals: 1, tone: "soft" },
 ] as const;
 
 const PILLARS = [
@@ -32,7 +34,7 @@ function ContextBars() {
   const reduce = useReducedMotion();
 
   return (
-    <div ref={ref} className="space-y-5 rounded-2xl border border-rule bg-paper-2/60 p-5 sm:p-7">
+    <div ref={ref} data-spotlight="" className="space-y-5 rounded-2xl border border-rule bg-paper-2/60 p-5 sm:p-7">
       <p className="font-mono text-xs text-muted">Always-on context injected per session</p>
       {BARS.map((bar, i) => (
         <div key={bar.label}>
@@ -40,14 +42,14 @@ function ContextBars() {
             <span className="text-sm text-ink">
               {bar.label} <span className="hidden text-muted sm:inline">· {bar.note}</span>
             </span>
-            <span className={`font-mono text-sm tabular-nums ${bar.tone === "honey" ? "text-honey" : "text-muted"}`}>
-              {bar.display}
+            <span className={`font-mono text-sm ${bar.tone === "honey" ? "text-honey" : "text-muted"}`}>
+              <Count to={bar.kb} play={inView} delay={0.15 + i * 0.18} duration={1.1} decimals={bar.decimals} prefix={bar.prefix} suffix=" KB" />
             </span>
           </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-paper-3">
             <motion.div
-              className={`h-full origin-left rounded-full ${
-                bar.tone === "honey" ? "bg-honey" : bar.tone === "soft" ? "bg-honey/40" : "bg-rule-strong"
+              className={`relative h-full origin-left overflow-hidden rounded-full ${
+                bar.tone === "honey" ? "bg-honey shadow-[0_0_14px_var(--color-honey)]" : bar.tone === "soft" ? "bg-honey/40" : "bg-rule-strong"
               }`}
               style={{ width: `${(bar.kb / 25) * 100}%` }}
               initial={{ scaleX: 0 }}
@@ -70,6 +72,7 @@ export function Why() {
       <SectionHead
         id="why"
         title="Less prompt. Better judgement."
+        accent="Better judgement."
         lede="Stacking toolkits floods every session with rules that fight each other. honey-stack keeps the best ideas from each and drops the noise."
       />
 
@@ -84,9 +87,13 @@ export function Why() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-10% 0px" }}
               transition={{ duration: 0.6, delay: i * 0.07, ease: easeOut }}
-              className="grid grid-cols-1 gap-1 py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6"
+              className="group relative grid grid-cols-1 gap-1 py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6"
             >
-              <dt className="font-medium text-ink">{p.title}</dt>
+              <span
+                aria-hidden="true"
+                className="absolute top-4 bottom-4 -left-4 w-0.5 origin-top scale-y-0 rounded-full bg-honey transition-transform duration-(--dur-long) ease-out group-hover:scale-y-100"
+              />
+              <dt className="font-medium text-ink transition-transform duration-(--dur-long) ease-out group-hover:translate-x-1">{p.title}</dt>
               <dd className="text-[15px] leading-relaxed text-muted">{p.body}</dd>
             </motion.div>
           ))}

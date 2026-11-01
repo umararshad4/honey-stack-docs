@@ -1,7 +1,8 @@
 "use client";
 
 import { Bug } from "lucide-react";
-import { motion, useMotionValueEvent, useReducedMotion, useScroll, useSpring } from "motion/react";
+import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { useRef, useState } from "react";
 import { easeOut, SectionHead } from "../reveal";
 
@@ -29,6 +30,9 @@ export function Flow() {
   const [scrolled, setScrolled] = useState(0);
   const lit = reduce ? STEPS.length : scrolled;
 
+  const beadX = useTransform(progress, (v) => `${(v - 1) * 100}%`);
+  const beadOpacity = useTransform(progress, [0, 0.03, 0.97, 1], [0, 1, 1, 0.6]);
+
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     setScrolled(Math.min(STEPS.length, Math.floor(v * STEPS.length + 0.35)));
   });
@@ -38,6 +42,7 @@ export function Flow() {
       <SectionHead
         id="flow"
         title="One flow, from idea to shipped."
+        accent="shipped."
         lede="The agent picks the right skill for each stage on its own. Bugs enter at debug — root cause first, and after two failed fixes on one premise, it tests the premise."
       />
 
@@ -52,27 +57,45 @@ export function Flow() {
             className="absolute inset-0 hidden origin-left bg-honey md:block"
             style={{ scaleX: reduce ? 1 : progress }}
           />
+          {/* A glowing bead rides the head of the fill (transform-only). */}
+          {!reduce && (
+            <>
+              <motion.div className="absolute inset-0 md:hidden" style={{ y: beadX, opacity: beadOpacity }}>
+                <span className="absolute bottom-0 left-1/2 size-2.5 -translate-x-1/2 translate-y-1/2 rounded-full bg-honey shadow-[0_0_16px_4px_var(--color-honey)]" />
+              </motion.div>
+              <motion.div className="absolute inset-0 hidden md:block" style={{ x: beadX, opacity: beadOpacity }}>
+                <span className="absolute top-1/2 right-0 size-2.5 translate-x-1/2 -translate-y-1/2 rounded-full bg-honey shadow-[0_0_16px_4px_var(--color-honey)]" />
+              </motion.div>
+            </>
+          )}
         </div>
 
         <ol className="relative grid grid-cols-1 gap-8 md:grid-cols-6 md:gap-4">
           {STEPS.map((step, i) => {
             const on = i < lit;
             return (
-              <li key={step.name} className="flex gap-4 md:flex-col md:items-center md:text-center">
-                <span
-                  className={`relative grid size-[31px] shrink-0 place-items-center rounded-full border font-mono text-xs tabular-nums transition-all duration-(--dur-long) ease-out ${
+              <motion.li
+                key={step.name}
+                className="flex gap-4 md:flex-col md:items-center md:text-center"
+                animate={{ y: on || reduce ? 0 : 6, opacity: on || reduce ? 1 : 0.55 }}
+                transition={{ duration: 0.5, ease: easeOut }}
+              >
+                <motion.span
+                  animate={{ scale: on && !reduce ? [1, 1.28, 1] : 1 }}
+                  transition={{ duration: 0.5, ease: easeOut }}
+                  className={`relative grid size-[31px] shrink-0 place-items-center rounded-full border font-mono text-xs tabular-nums transition-colors duration-(--dur-long) ease-out ${
                     on ? "border-honey bg-honey text-on-honey shadow-glow" : "border-rule-strong bg-paper text-faint"
                   }`}
                 >
                   {i + 1}
-                </span>
+                </motion.span>
                 <div className="md:mt-4">
                   <p className={`font-mono text-[15px] transition-colors duration-(--dur-long) ${on ? "text-ink" : "text-muted"}`}>
                     {step.name}
                   </p>
                   <p className="mt-1 text-sm leading-relaxed text-muted">{step.body}</p>
                 </div>
-              </li>
+              </motion.li>
             );
           })}
         </ol>
@@ -91,8 +114,9 @@ export function Flow() {
         {RULES.map((rule, i) => (
           <motion.div
             key={rule.title}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            data-spotlight=""
+            initial={{ opacity: 0, y: reduce ? 0 : 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10% 0px" }}
             transition={{ duration: 0.6, delay: i * 0.08, ease: easeOut }}
             className="bg-paper-2 p-6"

@@ -14,7 +14,23 @@ Next.js 16 (App Router, Cache Components), Tailwind CSS v4, Motion, Lenis and Sh
 pnpm install
 pnpm dev      # http://localhost:3000
 pnpm lint && pnpm build
+pnpm start & pnpm seo:check http://localhost:3000   # SEO audit against a running build
 ```
+
+## SEO
+
+- Every page is registered in `lib/seo.ts` with a unique title (≤ 60 chars with the suffix), a 120–160 character description, keywords, canonical, Open Graph and Twitter tags.
+- Per-page share images are rendered at build time by `app/og/[slug]` (Geist fonts in `assets/fonts`, OFL).
+- Structured data (`lib/structured-data.ts`): WebSite + Person everywhere, SoftwareApplication + SoftwareSourceCode + FAQPage on the home page, TechArticle + BreadcrumbList on docs pages. The FAQ is visible on the page, as the markup requires.
+- Crawl files: `sitemap.xml` (lastmod), `robots.txt`, `llms.txt`, `releases.xml` (RSS of GitHub releases), `manifest.webmanifest` and PNG app icons.
+- Security headers (CSP, frame, referrer, permissions, HSTS) live in `next.config.ts`.
+- `pnpm seo:check [baseUrl]` crawls every sitemap URL and fails on missing or duplicate titles and descriptions, a wrong canonical, missing Open Graph tags, broken share images, invalid JSON-LD, broken internal links, a soft 404 or missing headers.
+- `pnpm indexnow` notifies IndexNow engines (Bing and partners) of every sitemap URL after a deploy.
+- Search Console / Bing Webmaster verification: set `GOOGLE_SITE_VERIFICATION` or `BING_SITE_VERIFICATION` in Vercel and redeploy; the tags are added automatically.
+
+## Motion
+
+Motion (Framer Motion) and Lenis drive the animation. Every effect respects `prefers-reduced-motion`: `lib/use-reduced-motion.ts` is hydration-safe, and `MotionConfig reducedMotion="user"` skips transform animation. Canvas and auto-advancing pieces pause when off screen.
 
 ## Layout
 

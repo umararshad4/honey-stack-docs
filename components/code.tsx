@@ -17,7 +17,7 @@ export async function Code({ children, lang = "bash", title }: CodeProps) {
         className="overflow-x-auto py-3.5 pr-12 pl-4 text-[13px] leading-relaxed [&_pre]:outline-none"
         dangerouslySetInnerHTML={{ __html: html }}
       />
-      <CopyButton text={code} className="absolute top-2 right-2" />
+      <CopyButton text={code} className="absolute top-2 right-2 bg-paper-2 shadow-[-12px_0_12px_-4px_var(--color-paper-2)]" />
     </figure>
   );
 }
