@@ -129,6 +129,86 @@ body {
   opacity: 1;
 }
 
+/* Above-the-fold entrances run in CSS from the first paint — no wait for hydration,
+   so the largest contentful paint lands early even on slow phones. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes mask-rise {
+  from {
+    transform: translateY(110%) rotate(5deg);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes draw-in {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 0.7;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+.rise-in {
+  animation: rise-in 0.8s var(--ease-out) var(--delay, 0s) both;
+}
+.page-in {
+  animation: page-in 0.5s var(--ease-out) both;
+}
+.mask-rise {
+  transform-origin: bottom left;
+  animation: mask-rise 1s var(--ease-out) var(--delay, 0s) both;
+}
+.draw-in {
+  stroke-dasharray: 1;
+  animation: draw-in 0.9s var(--ease-out) var(--delay, 0s) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise-in,
+  .mask-rise,
+  .page-in {
+    animation-name: fade-in;
+    animation-delay: 0s;
+  }
+  .draw-in {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 0.7;
+  }
+}
+
 /* Soft sheen that sweeps across a surface once when it is hovered. */
 .sheen {
   position: relative;

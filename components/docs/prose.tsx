@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { CONTENT_UPDATED, pageSeo } from "@/lib/seo";
 import { docGraph } from "@/lib/structured-data";
 import { JsonLd } from "../json-ld";
-import { Words } from "../reveal";
+import { RiseWords } from "../rise-words";
 
 const updated = new Intl.DateTimeFormat("en", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }).format(
   new Date(`${CONTENT_UPDATED}T00:00:00Z`),
@@ -49,7 +49,7 @@ export function DocHeader({ path, title, lede }: { path: string; title: string; 
         </ol>
       </nav>
       <h1 className="text-4xl font-semibold tracking-[-0.035em] text-balance text-ink [overflow-wrap:anywhere] sm:text-5xl">
-        <Words text={title} stagger={0.04} />
+        <RiseWords text={title} start={0.05} step={0.05} />
       </h1>
       <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-muted">{lede}</p>
       <p className="mt-5 font-mono text-xs text-muted">
