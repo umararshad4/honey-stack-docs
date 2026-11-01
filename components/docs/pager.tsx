@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { flatDocs } from "@/lib/nav";
-import { repoPath } from "@/lib/site";
+import { site } from "@/lib/site";
 
 export function Pager() {
   const pathname = usePathname();
@@ -37,8 +37,8 @@ export function Pager() {
       </div>
       <p className="mt-6 text-xs text-muted">
         Source of truth:{" "}
-        <a href={repoPath("README.md")} className="underline decoration-rule-strong underline-offset-4 hover:text-ink">
-          the honey-stack README
+        <a href={`${site.repo}/tree/main/docs`} className="underline decoration-rule-strong underline-offset-4 hover:text-ink">
+          the honey-stack guides
         </a>
         . Spotted a gap? Open an issue.
       </p>
