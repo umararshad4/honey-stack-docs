@@ -8,7 +8,7 @@ export default function DocsLayout({ children }: LayoutProps<"/docs">) {
       <aside className="hidden lg:block">
         <Sidebar />
       </aside>
-      <div className="min-w-0">
+      <main className="min-w-0">
         <MobileDocsNav />
         <article id="doc-article" className="max-w-3xl">
           {children}
@@ -16,7 +16,7 @@ export default function DocsLayout({ children }: LayoutProps<"/docs">) {
         <div className="max-w-3xl">
           <Pager />
         </div>
-      </div>
+      </main>
       <aside className="hidden xl:block">
         <Toc />
       </aside>
