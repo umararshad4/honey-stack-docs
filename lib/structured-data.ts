@@ -1,5 +1,5 @@
 import { faq } from "./faq";
-import { absolute, CONTENT_PUBLISHED, CONTENT_UPDATED, ogSlug, pageSeo, sectionOf } from "./seo";
+import { absolute, CONTENT_PUBLISHED, ogSlug, pageSeo, sectionOf } from "./seo";
 import { site } from "./site";
 import { skillCount } from "./skills";
 
@@ -49,7 +49,7 @@ export function homeGraph(version: string) {
         url: site.url,
         applicationCategory: "DeveloperApplication",
         applicationSubCategory: "AI coding agent plugin",
-        operatingSystem: "macOS, Linux",
+        operatingSystem: "macOS, Linux, Windows",
         softwareVersion: version.replace(/^v/, ""),
         softwareRequirements: "Claude Code or Codex; Python 3.9+; git",
         license: "https://opensource.org/licenses/MIT",
@@ -123,7 +123,7 @@ export function docGraph(path: string) {
         mainEntityOfPage: url,
         image: absolute(`/og/${ogSlug(path)}`),
         datePublished: CONTENT_PUBLISHED,
-        dateModified: CONTENT_UPDATED,
+        dateModified: page.updated,
         articleSection: sectionOf(path),
         keywords: page.keywords,
         inLanguage: "en",

@@ -51,3 +51,18 @@ export async function getLatestVersion(): Promise<string> {
   const [latest] = await getReleases();
   return latest?.tag ?? site.fallbackVersion;
 }
+
+const RAW = site.repo.replace("https://github.com/", "https://raw.githubusercontent.com/") + "/main/";
+
+/** A Markdown file from the main repo's default branch, refreshed hourly. "" when unreachable. */
+export async function getRepoDoc(path: string): Promise<string> {
+  "use cache";
+  cacheLife("hours");
+
+  try {
+    const res = await fetch(RAW + path);
+    return res.ok ? (await res.text()).trim() : "";
+  } catch {
+    return "";
+  }
+}

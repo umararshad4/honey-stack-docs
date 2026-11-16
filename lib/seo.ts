@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { docsNav, flatDocs } from "./nav";
 import { site } from "./site";
 
-/** Content dates for sitemap lastmod and article dates. Bump CONTENT_UPDATED when page copy changes. */
+/** First publish date of the site's content. */
 export const CONTENT_PUBLISHED = "2026-11-01";
-export const CONTENT_UPDATED = "2026-11-01";
 
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 
@@ -17,6 +16,8 @@ export type PageSeo = {
   /** Search snippet, 120–160 characters. */
   description: string;
   keywords: string[];
+  /** Last real copy change (YYYY-MM-DD). Feeds sitemap lastmod, dateModified and "Updated" — bump it with the page's copy. */
+  updated: string;
 };
 
 const home: PageSeo = {
@@ -36,9 +37,10 @@ const home: PageSeo = {
     "CLAUDE.md rules",
     "honey-stack",
   ],
+  updated: "2026-11-17",
 };
 
-const docs: Record<string, Omit<PageSeo, "path" | "name">> = {
+const docs: Record<string, Omit<PageSeo, "path" | "name" | "updated"> & { updated?: string }> = {
   "/docs": {
     title: "Introduction to the always-on agent toolkit",
     description:
@@ -50,18 +52,21 @@ const docs: Record<string, Omit<PageSeo, "path" | "name">> = {
     description:
       "Install honey-stack with one command or as a Claude Code and Codex plugin. Requirements, activation, Codex hook trust and checking delivery with honey doctor.",
     keywords: ["install Claude Code plugin", "Codex plugin install", "Claude Code marketplace", "honey doctor"],
+    updated: "2026-11-16",
   },
   "/docs/modes": {
     title: "Response modes: direct, explain and balance",
     description:
       "Switch honey-stack between direct, explain and balance replies, pause it for a session, and teach your agent a rule instantly with remember: when X, Y.",
     keywords: ["Claude Code response style", "Codex response mode", "agent verbosity", "teach agent rules"],
+    updated: "2026-11-17",
   },
   "/docs/rules": {
     title: "Always-on rules: sizing, the ladder, proof",
     description:
       "The ~2 KB of rules honey-stack keeps in every session: task sizing, the six-rung smallest-change ladder, proof before done and decisions over questions.",
     keywords: ["AI agent rules", "CLAUDE.md best practices", "smallest complete change", "YAGNI for AI agents"],
+    updated: "2026-11-17",
   },
   "/docs/skills": {
     title: "38 Claude Code & Codex skills, 4 subagents",
@@ -86,6 +91,7 @@ const docs: Record<string, Omit<PageSeo, "path" | "name">> = {
     description:
       "Recursive self-improvement: observe, reflect, curate, apply. How your corrections become WHEN → THEN rules and evaluated skill patches, tier by tier.",
     keywords: ["recursive self-improvement", "self-improving AI agent", "agent learns from corrections", "RSI"],
+    updated: "2026-11-17",
   },
   "/docs/publishing": {
     title: "Publishing: from suggestion to merged release",
@@ -98,12 +104,14 @@ const docs: Record<string, Omit<PageSeo, "path" | "name">> = {
     description:
       "Every ~/.honey/config.json option — response mode, RSI budgets, autonomy holdouts and auto-update — plus privacy: no telemetry, redacted snippets only.",
     keywords: ["honey-stack config", "AI agent budget caps", "no telemetry", "agent privacy"],
+    updated: "2026-11-17",
   },
   "/docs/updates": {
     title: "Update and uninstall honey-stack safely",
     description:
       "How honey-stack updates itself from release tags without touching your local work, how Codex hook review works, and how to uninstall it cleanly.",
     keywords: ["update Claude Code plugin", "uninstall Codex plugin", "plugin auto-update", "Codex hook review"],
+    updated: "2026-11-17",
   },
   "/docs/development": {
     title: "Develop honey-stack: tests, evals, releases",
@@ -118,7 +126,7 @@ export const pages: PageSeo[] = [
   ...flatDocs.map((d) => {
     const seo = docs[d.href];
     if (!seo) throw new Error(`Missing SEO entry for ${d.href}`);
-    return { path: d.href, name: d.title, ...seo };
+    return { path: d.href, name: d.title, ...seo, updated: seo.updated ?? CONTENT_PUBLISHED };
   }),
 ];
 
@@ -159,7 +167,7 @@ export function pageMetadata(path: string): Metadata {
       images: [image],
       ...(isDoc && {
         publishedTime: CONTENT_PUBLISHED,
-        modifiedTime: CONTENT_UPDATED,
+        modifiedTime: page.updated,
         authors: [site.authorUrl],
         section: sectionOf(path),
         tags: page.keywords,

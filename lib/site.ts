@@ -9,7 +9,7 @@ export const site = {
   author: "King Umar",
   authorUrl: "https://github.com/umararshad4",
   /** Shown when the GitHub API is unreachable at build or revalidation time. */
-  fallbackVersion: "v0.16.2",
+  fallbackVersion: "v1.3.0",
 } as const;
 
 export const installCommandWindows =

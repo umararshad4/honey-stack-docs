@@ -124,7 +124,7 @@ export function Hero({ version, releasesUrl }: { version: string; releasesUrl: s
           </h1>
 
           <p style={cssDelay(0.3)} className="rise-in mt-6 max-w-xl text-[17px] leading-relaxed text-pretty text-muted sm:text-lg">
-            honey-stack distills five agent toolkits into one ~2 KB layer for Claude Code and Codex. It sizes every task,
+            honey-stack is a free Claude Code and Codex plugin that distills five agent toolkits into one ~2 KB layer. It sizes every task,
             proves work before calling it done, and turns your corrections into rules — then ships its own improvements.
           </p>
 

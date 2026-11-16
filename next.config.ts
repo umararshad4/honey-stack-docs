@@ -43,6 +43,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  // Crawlers (Bing especially) still request /favicon.ico; serve the generated PNG icon there.
+  async rewrites() {
+    return [{ source: "/favicon.ico", destination: "/apple-icon" }];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

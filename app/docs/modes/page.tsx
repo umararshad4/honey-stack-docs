@@ -12,7 +12,7 @@ export default function Page() {
       <DocHeader
         path={PATH}
         title="Modes"
-        lede="Pick how much the agent explains. Modes change response detail only — task sizing, verification and safety apply in every mode."
+        lede="Pick how much Claude Code or Codex explains. Modes change response detail only — task sizing, verification and safety apply in every mode."
       />
       <div className="prose-docs">
         <H2 id="response-styles">Response styles</H2>

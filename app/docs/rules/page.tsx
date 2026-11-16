@@ -11,7 +11,7 @@ export default function Page() {
       <DocHeader
         path={PATH}
         title="Always-on rules"
-        lede="About 2 KB of rules ride along in every session. They decide how big a task is, how much to build, when work counts as done and when to ask you."
+        lede="About 2 KB of rules ride along in every Claude Code and Codex session, the way a CLAUDE.md or AGENTS.md would. They decide how big a task is, how much to build, when work counts as done and when to ask you."
       />
       <div className="prose-docs">
         <H2 id="size-first">Size the task first</H2>

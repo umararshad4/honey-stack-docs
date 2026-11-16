@@ -13,7 +13,7 @@ export default function Page() {
       <DocHeader
         path={PATH}
         title="Configuration"
-        lede="Everything lives in ~/.honey/config.json, and every key is optional. The defaults are the recommended setup."
+        lede="Everything lives in ~/.honey/config.json, one file shared by Claude Code and Codex, and every key is optional. The defaults are the recommended setup."
       />
       <div className="prose-docs">
         <H2 id="config-file">The config file</H2>

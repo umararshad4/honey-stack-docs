@@ -38,6 +38,7 @@ ${faq.map((item) => `- ${item.q} ${item.a}`).join("\n")}
 
 ## Source
 
+- [Full documentation as one file](${site.url}/llms-full.txt)
 - [GitHub repository](${site.repo})
 - [Releases](${site.repo}/releases)
 - [Changelog](${site.repo}/blob/main/CHANGELOG.md)
