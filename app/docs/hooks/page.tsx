@@ -25,11 +25,11 @@ export default function Page() {
         <Table
           head={["Event", "What honey does"]}
           rows={[
-            ["Session start", "Injects the always-on rules, your mode, the indicator and the learned brief (≤1.5 KB)."],
+            ["Session start", "Injects the always-on rules, your mode, the indicator and the learned brief (≤1.1 KB)."],
             ["Prompt submit", "Handles modes, remember: rules and task scope; records bounded, redacted signals for RSI."],
             ["Before a tool call", "The guard inspects shell commands for catastrophic or risky operations."],
             ["After a tool call", "The secret scan checks newly written text for keys and tokens."],
-            ["Stop", "The receipt gate asks for the Checks run line after a turn that edited files."],
+            ["Stop", "The receipt gate checks the status block after a turn that edited files."],
             ["Session end", "Starts reflection in the background when the session had signal."],
           ]}
         />
@@ -82,8 +82,9 @@ export default function Page() {
 
         <H2 id="receipt-gate">Receipt gate</H2>
         <p>
-          After a turn that edited files, the stop hook asks once for the receipt line — <code>Checks run: … Skipped: … Risk: …</code>. Question and
-          answer turns are never nagged, and honest “not yet verified” reports are allowed.
+          After a turn that edited files, the stop hook looks for the status block — <code>Verdict: …</code> and{" "}
+          <code>Checks run: … Skipped: … Risk: …</code>. A turn that claims done while its verdict is NOT VERIFIED or INCONCLUSIVE is recorded for
+          RSI. It never blocks: question and answer turns are never judged, and honest “not yet verified” reports are allowed.
         </p>
       </div>
     </>

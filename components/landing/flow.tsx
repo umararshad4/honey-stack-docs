@@ -127,7 +127,7 @@ export function Flow() {
         ))}
       </div>
       <p className="mt-5 font-mono text-[13px] text-muted">
-        Every dev task ends with one honest line: <span className="text-ink">Checks run: … Skipped: … Risk: …</span>
+        Every work turn ends with one status block: <span className="text-ink">Shipped · Verdict: VERIFIED · Checks run</span>
       </p>
     </section>
   );

@@ -71,10 +71,20 @@ export default function Page() {
           Claims are labelled <strong>measured</strong>, <strong>inferred</strong> or <strong>guess</strong>. Root cause comes before a fix, and after
           two failed fixes on one premise, the premise itself gets tested.
         </p>
-        <Callout title="The receipt line">
-          Every dev task ends with one honest line: <code>Checks run: … Skipped: … Risk: …</code> (empty parts omitted). A receipt is not proof —
-          the checks behind it are.
+        <Callout title="The status block">
+          Every work turn ends the same way, empty lines omitted: <code>Asks: 1 done · 2 partial (why)</code>,{" "}
+          <code>Shipped: branch · PR · merged | open | not pushed</code>, <code>Verdict: VERIFIED | NOT VERIFIED | INCONCLUSIVE</code> and{" "}
+          <code>Checks run: … Skipped: … Risk: …</code>. VERIFIED means this turn&apos;s checks prove the claim; inconclusive is never a pass. A
+          receipt is not proof — the checks behind it are.
         </Callout>
+
+        <H2 id="same-path">Same task, same path</H2>
+        <p>
+          When a workflow skill loads, the agent copies its numbered steps into its todo list word for word and works them in order. A step that
+          doesn&apos;t apply stays on the list as <code>n/a: &lt;reason&gt;</code>, so you can see what was skipped and why. Workflow skills end
+          with a fixed reply shape — debug always reports symptom, root cause, fix at <code>file:line</code> and red-then-green output — and
+          subagents treat their brief as the whole job: no extra scope, no questions back, reversible choices reported.
+        </p>
 
         <H2 id="decisions">Decisions over questions</H2>
         <p>

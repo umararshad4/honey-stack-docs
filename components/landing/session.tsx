@@ -17,7 +17,7 @@ const LINES: Line[] = [
   { key: "cause", label: "cause", text: "cart state leaks between tests" },
   { key: "fix", label: "fix", text: "isolate cart per test · 1 file" },
   { key: "proof", label: "proof", text: "pnpm test checkout ✓ 14 passed", tone: "ok" },
-  { key: "receipt", text: "Checks run: pnpm test checkout · Risk: none", tone: "receipt" },
+  { key: "receipt", text: "Verdict: VERIFIED · Checks run: pnpm test checkout", tone: "receipt" },
   { key: "learn", label: "rsi", text: "WHEN state leaks → THEN isolate it", tone: "learn" },
 ];
 

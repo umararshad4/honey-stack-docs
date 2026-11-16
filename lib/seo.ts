@@ -79,6 +79,7 @@ const docs: Record<string, Omit<PageSeo, "path" | "name" | "updated"> & { update
     description:
       "How honey-stack's lifecycle hooks work in Claude Code and Codex: a destructive-command guard, a secret scan of newly written text and a receipt gate.",
     keywords: ["Claude Code hooks", "Codex hooks", "dangerous command guard", "AI agent secret scanning"],
+    updated: "2026-11-17",
   },
   "/docs/evidence": {
     title: "Task evidence: proof that checks really ran",
