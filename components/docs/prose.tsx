@@ -1,17 +1,15 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { CONTENT_UPDATED, pageSeo } from "@/lib/seo";
+import { pageSeo } from "@/lib/seo";
 import { docGraph } from "@/lib/structured-data";
 import { JsonLd } from "../json-ld";
 import { RiseWords } from "../rise-words";
 
-const updated = new Intl.DateTimeFormat("en", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }).format(
-  new Date(`${CONTENT_UPDATED}T00:00:00Z`),
-);
+const dateFormat = new Intl.DateTimeFormat("en", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 /** Page heading plus the breadcrumb trail and structured data that match it. */
 export function DocHeader({ path, title, lede }: { path: string; title: string; lede: ReactNode }) {
-  const { name } = pageSeo(path);
+  const { name, updated } = pageSeo(path);
   return (
     <header className="mb-10 border-b border-rule pb-8">
       <JsonLd data={docGraph(path)} />
@@ -53,7 +51,7 @@ export function DocHeader({ path, title, lede }: { path: string; title: string; 
       </h1>
       <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-muted">{lede}</p>
       <p className="mt-5 font-mono text-xs text-muted">
-        Updated <time dateTime={CONTENT_UPDATED}>{updated}</time>
+        Updated <time dateTime={updated}>{dateFormat.format(new Date(`${updated}T00:00:00Z`))}</time>
       </p>
     </header>
   );

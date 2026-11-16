@@ -12,7 +12,7 @@ export default function Page() {
       <DocHeader
         path={PATH}
         title="Update & uninstall"
-        lede="honey-stack updates itself from release tags, never touches your local work, and uninstalls cleanly."
+        lede="honey-stack updates itself in Claude Code and Codex from release tags, never touches your local work, and uninstalls cleanly."
       />
       <div className="prose-docs">
         <H2 id="automatic-updates">Automatic updates</H2>

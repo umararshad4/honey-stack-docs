@@ -13,7 +13,7 @@ export default function Page() {
       <DocHeader
         path={PATH}
         title="RSI: how it learns"
-        lede="Recursive self-improvement watches how sessions actually go, turns repeated corrections into rules, and turns evidence into evaluated skill patches. Every change passes a gate first."
+        lede="Recursive self-improvement watches how your Claude Code and Codex sessions actually go, turns repeated corrections into rules, and turns evidence into evaluated skill patches. Every change passes a gate first."
       />
       <div className="prose-docs">
         <H2 id="the-loop">The loop</H2>
