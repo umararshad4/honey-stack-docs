@@ -17,12 +17,17 @@ export default function Page() {
       />
       <div className="prose-docs">
         <H2 id="local-checks">Local checks</H2>
-        <Code>{`python3 tests/run.py                    # stdlib self-checks
+        <Code>{`python3 tests/run.py                    # stdlib self-checks, in parallel
+python3 tests/run.py --changed          # only tests the diff can affect
+python3 tests/run.py guard ship         # by name
 claude plugin validate .
 claude plugin eval . --tag smoke --runs 1 --ablation none --max-cost-usd 2 --no-publish --allow-tools Bash Write Edit
 python3 scripts/release.py X.Y.Z --push # optional manual release`}</Code>
         <p>
           The runner gives every test script temporary state and a fake model provider, so tests run offline and never make paid model calls.
+          Test files run in parallel (112 s → 26 s on an 8-core machine). <code>--changed</code> maps changed files to the tests that import or
+          drive them and runs everything when it can&apos;t tell; CI always runs the full suite. Pull-request CI cancels a superseded run when a
+          new commit lands and uses four jobs: Ubuntu on Python 3.9 and 3.12, macOS on 3.9 and Windows on 3.12.
           JavaScript regex compatibility is also checked when Node is installed.
         </p>
 

@@ -61,9 +61,11 @@ honey task verify --check lint --tool-call <actual-lint-call-id>`}</Code>
         <Code>{`honey task set --mode execute --operation code --cwd /path/to/project
 honey task run --check verification -- python3 tests/run.py`}</Code>
         <p>
-          Printed success can&apos;t manufacture proof: changed source, HEAD or index makes the result stale. The snapshot covers tracked and
-          non-ignored files (up to 20,000 files or 64 MiB), rejects source symlinks, and doesn&apos;t claim to cover ignored dependencies or the
-          external environment.
+          Printed success can&apos;t manufacture proof: changed source, HEAD or index makes the result stale. The snapshot pins clean files through
+          HEAD, the index and <code>git status</code>, and hashes only changed or untracked files, so it&apos;s read-only — it never rewrites{" "}
+          <code>.git/index</code> or writes objects — and 1.3–2× faster on real repos. Symlinks are hashed by target. Touching a file without
+          changing it doesn&apos;t invalidate a check. On Windows, where a write doesn&apos;t move ctime, every file is hashed. It doesn&apos;t
+          claim to cover ignored dependencies or the external environment.
         </p>
 
         <H2 id="metrics">Metrics</H2>

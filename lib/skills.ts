@@ -9,7 +9,7 @@ export const autoSkills: Skill[] = [
   { name: "tdd", summary: "Build or fix test-first with a red-green loop." },
   { name: "verify", summary: "Run the checks that prove a change before calling it done." },
   { name: "review", summary: "Review diffs, branches and PRs; handle review feedback." },
-  { name: "ship", summary: "Commit, push, open PRs, resolve conflicts, finish branches." },
+  { name: "ship", summary: "Commit, push and open a PR in one call (honey ship), resolve conflicts, finish branches." },
   { name: "deploy", summary: "Cloud and PaaS deploys, containers, IaC and CI/CD." },
   { name: "test-design", summary: "Design the test matrix and hard edge cases before writing tests." },
   { name: "tooling", summary: "Monorepos, lint, format, typecheck, hooks and CI wiring." },

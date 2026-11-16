@@ -1,3 +1,4 @@
+import { Code } from "@/components/code";
 import { Callout, DocHeader, H2, Table } from "@/components/docs/prose";
 import { agents, autoSkills, manualSkills, skillCount, type Skill } from "@/lib/skills";
 import { pageMetadata } from "@/lib/seo";
@@ -54,6 +55,19 @@ export default function Page() {
           <strong>qa</strong> uses the tester-army/e2e CLI and project MCP server by default, and discovers existing WebMCP tools for setup and
           contract checks. Real interactions, visual checks and backend assertions still prove their own requirements. The fast QA path schedules
           independent flows across bounded workers while keeping failure screenshots.
+        </p>
+        <H2 id="honey-ship">Ship in one call</H2>
+        <p>
+          <code>honey ship</code> checks, commits, pushes and opens — or reuses — a PR in one command, and the <strong>ship</strong> skill uses it
+          as its fast path. A word naming any branch on your remote becomes the PR target; without <code>-m</code> it ships commits you already
+          made.
+        </p>
+        <Code>{`honey ship staging -m "fix: login redirect" --check "npm test" src/login.ts
+honey ship test   # already committed: push and open a PR into test`}</Code>
+        <p>
+          It stages only the files you name, commits nothing if the check fails, refuses to commit on the default branch, never force-pushes, and
+          stops with &ldquo;fetch and integrate&rdquo; when the remote has moved. A word that is both a file and a branch is refused rather than
+          guessed.
         </p>
         <Callout title="Frontend quality">
           Motion audits, frame diagnostics, realistic worst-case data, touch and safe-area checks live in <code>frontend</code>, <code>qa</code>,{" "}
