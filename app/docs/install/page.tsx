@@ -23,7 +23,7 @@ export default function Page() {
         <Callout title="Windows">
           Hooks run <code>python3</code>, so that exact command must work. Python from the python.org install manager or the Microsoft Store
           provides it; the classic python.org installer only adds <code>python</code> and <code>py</code>. Claude Code runs hooks through Git Bash,
-          which comes with Git for Windows. <code>honey</code> is installed as a launcher file, so Developer Mode isn&apos;t needed.
+          which comes with Git for Windows. <code>honey</code> is installed as a launcher file, so Developer Mode isn&apos;t needed. RSI&apos;s autonomous skill patching isn&apos;t supported on Windows yet.
         </Callout>
 
         <H2 id="quick-install">Quick install</H2>
