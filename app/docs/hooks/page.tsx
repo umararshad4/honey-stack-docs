@@ -41,12 +41,38 @@ export default function Page() {
           <code>xargs rm -rf</code>.
         </p>
         <p>
-          Recoverable-but-risky commands (git history, cloud resources) are asked about; catastrophic ones are denied. Under bypass permissions, or on
-          Codex, every hit is a deny. The guard stays on even when you say <code>honey off</code>.
+          Every hit is advisory: honey adds a warning to the agent&apos;s context and records it, but never blocks or denies the command. The guard
+          stays on even when you say <code>honey off</code>.
+        </p>
+        <p>
+          It stays quiet on routine cleanup. <code>rm -rf</code> and <code>find -delete</code> on absolute paths strictly inside the tool call&apos;s
+          working directory or a temp dir pass; the directory itself, <code>&lt;root&gt;/*</code>, <code>..</code> escapes, siblings, home and{" "}
+          <code>/</code> still warn. Heredoc bodies are data unless a shell consumes them (<code>bash &lt;&lt;EOF</code>, <code>| sh</code>,{" "}
+          <code>eval &quot;$(cat &lt;&lt;EOF</code>, or <code>$( )</code> in an unquoted heredoc). Anything ambiguous — a quoted, commented or
+          unterminated <code>&lt;&lt;</code> — stays under inspection. Windows drive and backslash paths are compared the same way.
         </p>
         <Callout title="A safety net, not a sandbox">
           Runtime indirection like <code>a=/; rm -rf $a</code> or decoded payloads can get through. Treat the guard as a last line of defence.
         </Callout>
+
+        <H2 id="speed">Speed</H2>
+        <p>
+          Hooks run on every tool call — about 180 times in an average session — so each event loads only the code it needs. Measured on an M1 Pro,
+          v1.2.0 against v1.3.0:
+        </p>
+        <Table
+          head={["Hook", "v1.2.0", "v1.3.0"]}
+          rows={[
+            ["Before a tool call", "55.4 ms", "31.2 ms"],
+            ["After a tool call", "54.5 ms", "30.6 ms"],
+            ["Prompt submit", "55.9 ms", "36.9 ms"],
+            ["Stop", "54.6 ms", "36.2 ms"],
+            ["Session start", "62.2 ms", "51.8 ms"],
+          ]}
+        />
+        <p>
+          A test fails the build if heavy modules creep back into the tool-call path, so the gain can&apos;t quietly regress.
+        </p>
 
         <H2 id="secret-scan">Secret scan</H2>
         <p>
