@@ -1,6 +1,6 @@
 import { Code } from "@/components/code";
 import { Callout, DocHeader, H2, Steps } from "@/components/docs/prose";
-import { installCommand } from "@/lib/site";
+import { installCommand, installCommandWindows } from "@/lib/site";
 import { pageMetadata } from "@/lib/seo";
 
 const PATH = "/docs/install";
@@ -18,15 +18,22 @@ export default function Page() {
       <div className="prose-docs">
         <H2 id="requirements">Requirements</H2>
         <p>
-          Claude Code and/or Codex, <code>python3</code> 3.9 or newer, and <code>git</code>. macOS and Linux are supported; Windows isn&apos;t yet.
+          Claude Code and/or Codex, <code>python3</code> 3.9 or newer, and <code>git</code>, on macOS, Linux or Windows.
         </p>
+        <Callout title="Windows">
+          Hooks run <code>python3</code>, so that exact command must work. Python from the python.org install manager or the Microsoft Store
+          provides it; the classic python.org installer only adds <code>python</code> and <code>py</code>. Claude Code runs hooks through Git Bash,
+          which comes with Git for Windows. <code>honey</code> is installed as a launcher file, so Developer Mode isn&apos;t needed.
+        </Callout>
 
         <H2 id="quick-install">Quick install</H2>
         <p>The script clones the repository and runs a dry run. It then prints the install command to run.</p>
         <Code>{installCommand}</Code>
+        <p>On Windows, in PowerShell:</p>
+        <Code>{installCommandWindows}</Code>
         <p>Or do it by hand:</p>
         <Code>{`git clone https://github.com/umararshad4/honey-stack.git && cd honey-stack
-bin/honey install --dry-run && bin/honey install`}</Code>
+python3 bin/honey install --dry-run && python3 bin/honey install`}</Code>
 
         <H2 id="plugin-only">Plugin only</H2>
         <p>If you only want the plugin, without the CLI on your PATH:</p>

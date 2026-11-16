@@ -30,6 +30,6 @@ export const faq = [
   },
   {
     q: "What do I need to run it?",
-    a: "Claude Code and/or Codex, python3 3.9 or newer, and git, on macOS or Linux. Windows isn't supported yet.",
+    a: "Claude Code and/or Codex, python3 3.9 or newer, and git, on macOS, Linux or Windows. On Windows, install with the PowerShell one-liner and make sure python3 is on PATH.",
   },
 ] as const;

@@ -12,6 +12,8 @@ export const site = {
   fallbackVersion: "v0.16.2",
 } as const;
 
+export const installCommandWindows =
+  "irm https://raw.githubusercontent.com/umararshad4/honey-stack/main/install.ps1 | iex";
 export const installCommand =
   "curl -fsSL https://raw.githubusercontent.com/umararshad4/honey-stack/main/install.sh | bash";
 

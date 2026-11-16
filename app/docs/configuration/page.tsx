@@ -48,7 +48,9 @@ export default function Page() {
         </p>
 
         <H2 id="platforms">Platforms</H2>
-        <p>macOS and Linux. Windows isn&apos;t supported yet.</p>
+        <p>
+          macOS, Linux and Windows. On Windows, <code>python3</code> must be on PATH; see <Link href="/docs/install#requirements">requirements</Link>.
+        </p>
       </div>
     </>
   );

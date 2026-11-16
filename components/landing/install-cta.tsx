@@ -25,7 +25,7 @@ export function InstallCta() {
               <Words text="Install in one line." accent="one line." />
             </h2>
             <p className="mt-4 text-[17px] leading-relaxed text-muted">
-              Needs Claude Code and/or Codex, python3 3.9+ and git. macOS and Linux. Every change is reversible with{" "}
+              Needs Claude Code and/or Codex, python3 3.9+ and git. macOS, Linux and Windows. Every change is reversible with{" "}
               <code className="font-mono text-[15px] text-ink">honey uninstall</code>.
             </p>
             <div className="mt-6">

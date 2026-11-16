@@ -19,7 +19,7 @@ export async function GET() {
 
 > ${site.description}
 
-Latest release: ${version}. License: MIT. Platforms: macOS and Linux. Requires Claude Code and/or Codex, python3 3.9+ and git.
+Latest release: ${version}. License: MIT. Platforms: macOS, Linux and Windows (PowerShell installer: install.ps1). Requires Claude Code and/or Codex, python3 3.9+ and git.
 
 Key facts:
 - About 2 KB of always-on rules replace roughly 25 KB of stacked toolkit prompts.
