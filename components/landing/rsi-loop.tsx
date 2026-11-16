@@ -37,7 +37,7 @@ const STEPS = [
 ];
 
 const TIERS = [
-  { tier: 0, change: "Learned rules in each session's brief (≤1.5 KB)", who: "Automatic" },
+  { tier: 0, change: "Learned rules in each session's brief (≤1.1 KB)", who: "Automatic" },
   { tier: 1, change: "Instruction edits and known toolkit repairs, with backups", who: "You, or autonomous RSI" },
   { tier: 2, change: "Skill patches and new skills that pass regression evals", who: "You, or autonomous RSI" },
   { tier: 3, change: "Enforced guards, ≤1% false positives on replay", who: "You, or autonomous RSI" },

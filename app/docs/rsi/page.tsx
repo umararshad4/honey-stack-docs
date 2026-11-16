@@ -39,7 +39,7 @@ export default function Page() {
         <Table
           head={["Tier", "Changes", "Who decides"]}
           rows={[
-            ["0", "Learned rules in each session's brief (≤1.5 KB)", "Automatic"],
+            ["0", "Learned rules in each session's brief (≤1.1 KB)", "Automatic"],
             ["1", "Instruction edits and known toolkit repairs, with backups", "You, or autonomous RSI"],
             ["2", "Skill patches and new skills that pass regression evaluations", "You, or autonomous RSI"],
             ["3", "Enforced guards (≤1% false positives on replay)", "You, or autonomous RSI"],
@@ -58,11 +58,20 @@ export default function Page() {
             [<code key="c">/rsi coach</code>, "An evidence-based report on what's improving or repeating."],
             [<code key="b">/rsi bootstrap</code>, "Fresh install: seed rules from your existing agent memories."],
             [<code key="w">/rsi why &lt;id&gt; · forget &lt;id&gt;</code>, "Inspect a rule, or reject it for good."],
+            [<code key="f">honey rsi proof &lt;id&gt; &quot;&lt;evidence&gt;&quot;</code>, "Record that a suggested check fails on the real mistake, turning the rule into structure."],
           ]}
         />
         <p>
           In Codex, use <code>$rsi …</code> instead of <code>/rsi …</code>. A weekly job also checks upstream toolkits and surfaces only changes that
           match friction you actually had.
+        </p>
+
+        <H2 id="structure-first">Structure before prose</H2>
+        <p>
+          When a lesson repeats, RSI suggests a check that would catch it — a type, a lint, a test or a guard — before relying on another written
+          rule. <code>/rsi review</code> shows the suggestion. It stays a prose rule until you record proof that the check fails on the recorded
+          mistake with <code>honey rsi proof</code>. Repeated question marks are read as emphasis, not frustration, so the signal RSI learns from
+          stays clean.
         </p>
 
         <H2 id="autonomy">Autonomous mode</H2>
